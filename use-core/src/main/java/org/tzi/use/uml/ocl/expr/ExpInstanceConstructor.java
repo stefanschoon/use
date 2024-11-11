@@ -38,22 +38,13 @@ import java.util.TreeMap;
  *
  * @author Stefan Schoon
  */
-public final class ExpInstanceConstructor extends Expression {
+public final class ExpInstanceConstructor extends ExpObjOp {
 
     private final MClassifier classifier;
 
-    private final MOperation constructor;
-
-    /**
-     * The arguments.
-     */
-    private final Expression[] fArgs;
-
-    public ExpInstanceConstructor(MClassifier classifier, Expression[] args) throws ExpInvalidException {
-        super(classifier);
-        this.classifier = classifier;
-        this.constructor = classifier.operation(classifier.name(), false);
-        fArgs = args;
+    public ExpInstanceConstructor(MOperation constructor, Expression[] args) throws ExpInvalidException {
+        super(constructor, args);
+        this.classifier = constructor.cls();
     }
 
     @Override
@@ -64,7 +55,7 @@ public final class ExpInstanceConstructor extends Expression {
 
         ctx.enter(this);
 
-        List<String> parameterNames = constructor.paramNames();
+        List<String> parameterNames = fOp.paramNames();
         int argsSize = parameterNames.size();
         Value[] arguments = new Value[argsSize];
         Map<String, Value> argValues = new TreeMap<>();
@@ -81,7 +72,7 @@ public final class ExpInstanceConstructor extends Expression {
         MInstance self = new MDataTypeValue(classifier, classifier.name(), varBindings);
         Value result = new DataTypeValueValue(classifier, self, argValues);
 
-        MOperationCall operationCall = new MOperationCall(this, self, constructor, arguments);
+        MOperationCall operationCall = new MOperationCall(this, self, fOp, arguments);
         operationCall.setPreferredPPCHandler(ExpressionPPCHandler.getDefaultOutputHandler());
         operationCall.setResultValue(result);
 
@@ -106,16 +97,6 @@ public final class ExpInstanceConstructor extends Expression {
     }
 
     @Override
-    protected boolean childExpressionRequiresPreState() {
-        for (Expression e : fArgs) {
-            if (e.requiresPreState()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public StringBuilder toString(StringBuilder sb) {
         sb.append(classifier.name()).append("(");
         StringUtil.fmtSeqBuffered(sb, fArgs, 1, ", ");
@@ -124,22 +105,6 @@ public final class ExpInstanceConstructor extends Expression {
 
     @Override
     public String name() {
-        return constructor.name();
-    }
-
-    /**
-     * All arguments of the expression.
-     */
-    public Expression[] getArguments() {
-        return fArgs;
-    }
-
-    public MOperation getOperation() {
-        return constructor;
-    }
-
-    @Override
-    public void processWithVisitor(ExpressionVisitor visitor) {
-        visitor.visitInstanceConstructor(this);
+        return fOp.name();
     }
 }

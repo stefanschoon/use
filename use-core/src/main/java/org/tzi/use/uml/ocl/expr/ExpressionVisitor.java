@@ -49,7 +49,6 @@ public interface ExpressionVisitor {
 	void visitNavigation (ExpNavigation exp);
 	void visitObjAsSet (ExpObjAsSet exp);
 	void visitObjOp (ExpObjOp exp);
-	void visitInstanceConstructor(ExpInstanceConstructor exp);
 	void visitObjRef (ExpObjRef exp);
 	void visitOne (ExpOne exp);
 	void visitOrderedSetLiteral (ExpOrderedSetLiteral exp);

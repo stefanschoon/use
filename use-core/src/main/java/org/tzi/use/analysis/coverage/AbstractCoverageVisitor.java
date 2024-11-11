@@ -208,23 +208,6 @@ public abstract class AbstractCoverageVisitor implements ExpressionVisitor {
 	}
 
 	@Override
-	public void visitInstanceConstructor(ExpInstanceConstructor exp) {
-		for (Expression ex : exp.getArguments()) {
-			ex.processWithVisitor(this);
-		}
-
-		addOperationCoverage((MClassifier) exp.getArguments()[0].type(),
-				exp.getOperation());
-
-		if (expandOperations && exp.getOperation().hasExpression()
-				&& !operationStack.contains(exp.getOperation())) {
-			operationStack.push(exp.getOperation());
-			exp.getOperation().expression().processWithVisitor(this);
-			operationStack.pop();
-		}
-	}
-
-	@Override
 	public void visitObjRef(ExpObjRef exp) {
 		exp.processWithVisitor(this);
 	}
