@@ -19,7 +19,6 @@
 
 package org.tzi.use.uml.ocl.expr;
 
-import org.tzi.use.uml.mm.MClassifier;
 import org.tzi.use.uml.mm.MOperation;
 import org.tzi.use.uml.ocl.value.DataTypeValueValue;
 import org.tzi.use.uml.ocl.value.VarBindings;
@@ -38,13 +37,10 @@ import java.util.TreeMap;
  *
  * @author Stefan Schoon
  */
-public final class ExpInstanceConstructor extends ExpObjOp {
+public final class ExpInstanceConstructor extends ExpInstanceOp {
 
-    private final MClassifier classifier;
-
-    public ExpInstanceConstructor(MOperation constructor, Expression[] args) throws ExpInvalidException {
+    public ExpInstanceConstructor(MOperation constructor, Expression[] args) {
         super(constructor, args);
-        this.classifier = constructor.cls();
     }
 
     @Override
@@ -69,8 +65,8 @@ public final class ExpInstanceConstructor extends ExpObjOp {
         for (VarBindings.Entry e : ctx.varBindings()) {
             varBindings.put(e.getVarName(), e.getValue());
         }
-        MInstance self = new MDataTypeValue(classifier, classifier.name(), varBindings);
-        Value result = new DataTypeValueValue(classifier, self, argValues);
+        MInstance self = new MDataTypeValue(fClassifier, fClassifier.name(), varBindings);
+        Value result = new DataTypeValueValue(fClassifier, self, argValues);
 
         MOperationCall operationCall = new MOperationCall(this, self, fOp, arguments);
         operationCall.setPreferredPPCHandler(ExpressionPPCHandler.getDefaultOutputHandler());
@@ -98,13 +94,8 @@ public final class ExpInstanceConstructor extends ExpObjOp {
 
     @Override
     public StringBuilder toString(StringBuilder sb) {
-        sb.append(classifier.name()).append("(");
+        sb.append(fClassifier.name()).append("(");
         StringUtil.fmtSeqBuffered(sb, fArgs, 1, ", ");
         return sb.append(")");
-    }
-
-    @Override
-    public String name() {
-        return fOp.name();
     }
 }
