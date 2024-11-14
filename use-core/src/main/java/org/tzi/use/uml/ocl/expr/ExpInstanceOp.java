@@ -4,13 +4,18 @@ import org.tzi.use.uml.mm.MClassifier;
 import org.tzi.use.uml.mm.MOperation;
 import org.tzi.use.uml.ocl.value.Value;
 
+/**
+ * Abstract class for operations and constructors defined by a classifier.
+ *
+ * @author Stefan Schoon
+ */
 public abstract class ExpInstanceOp extends Expression {
-    protected MOperation fOp;
+    protected final MOperation fOp;
 
     /**
      * The arguments, first one is "receiver" object
      */
-    protected Expression[] fArgs;
+    protected final Expression[] fArgs;
 
     protected final MClassifier fClassifier;
 

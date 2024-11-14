@@ -37,9 +37,9 @@ import java.util.TreeMap;
  *
  * @author Stefan Schoon
  */
-public final class ExpInstanceConstructor extends ExpInstanceOp {
+public final class ExpConstructor extends ExpInstanceOp {
 
-    public ExpInstanceConstructor(MOperation constructor, Expression[] args) {
+    public ExpConstructor(MOperation constructor, Expression[] args) {
         super(constructor, args);
     }
 

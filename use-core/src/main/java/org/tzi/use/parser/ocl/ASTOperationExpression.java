@@ -630,7 +630,7 @@ public class ASTOperationExpression extends ASTExpression {
         	
             try {
                 if (op.isConstructor()) {
-                    res = new ExpInstanceConstructor(op, fArgExprs);
+                    res = new ExpConstructor(op, fArgExprs);
                 } else {
                     // constructor performs additional checks
                     res = new ExpObjOp(op, fArgExprs);
